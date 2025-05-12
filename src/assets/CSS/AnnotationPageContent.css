@@ -1,0 +1,90 @@
+/* Card */
+.card-content{
+    width: 70%;
+    margin: 5% 15% 5% 15%;
+}
+/* Stepper panel container */
+.custom-stepper-panel {
+  padding: 2rem;
+  border-radius: 1rem;
+  background-color: #e8f5e9;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.p-stepper.p-stepper-vertical .p-stepper-panel .p-stepper-content{
+    padding-left: 1.5rem;
+}
+
+/* Inner wrapper for this step */
+.step-content {
+    display: flex;
+    width: 70%;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+/* Style the MultiSelect dropdown */
+.filter-dropdown .p-multiselect {
+    border-radius: 0.5rem;
+    border: 1px solid #c8e6c9;
+    padding: 0.5rem;
+    font-size: 1rem;
+    background-color: white;
+    width: 50%;
+}
+
+.filter-dropdown .p-multiselect:hover {
+    border-color: #81c784;
+}
+
+/* Dropdown panel styling (when opened) */
+.p-multiselect-panel {
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Buttons wrapper */
+.step-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+}
+
+.step-content .p-button{
+    border: none;
+    color: white;
+    padding: 0.75rem 1.5rem;
+    font-weight: 500;
+    border-radius: 0.5rem;
+}
+
+.step-content .p-button.next-btn{
+    background-color: rgba(67, 160, 71, 0.9);
+}
+
+.step-content .p-button.next-btn:hover {
+    background-color: #2e7d32;
+}
+.step-content .p-button.back-btn{
+    background-color: rgba(117, 117, 117, 0.8);
+}
+
+.step-content .p-button.back-btn:hover {
+    background-color: #757575;
+}
+
+/* Text of step-content */
+.step-content p {
+    font-weight: 500;
+    font-size: large;
+}
+.p-stepper .p-stepper-header .p-stepper-action .p-stepper-title{
+    font-weight: 600;
+    font-size: larger;
+}
+
+.step-content p, .p-stepper .p-stepper-header .p-stepper-action .p-stepper-title{
+    font-family: 'Source Sans 3', sans-serif;
+    font-style: normal;
+}
+
