@@ -1,107 +1,76 @@
-import {Stepper} from "primereact/stepper";
+import React, { useRef, useState, useEffect } from "react";
+import { Stepper } from "primereact/stepper";
+import { Card } from "primereact/card";
 import {StepperPanel} from "primereact/stepperpanel";
-import {Button} from "primereact/button";
-import {Card} from "primereact/card";
-import React, {useRef, useState} from "react";
+
+import { groupOptionsFromServerData } from "../utils/filters";
+
+import PSGUploadStepperContent from "./Steppers/PSGUploadStepperContent.jsx";
+import FiltersStepperContent from "./Steppers/FiltersStepperContent.jsx";
+import EPPGUploadStepperContent from "./Steppers/EPPGUploadStepperContent.jsx";
+import ConfirmStepperContent from "./Steppers/ConfirmStepperContent.jsx";
 
 import "../CSS/AnnotationPageContent.css"
-import {FileUpload} from "primereact/fileupload";
-import {MultiSelect} from "primereact/multiselect";
 
-
-export default function AnnotationPageContent(){
+export default function AnnotationPageContent() {
     const stepperRef = useRef(null);
-    const [filterOptions, setFilterOptions] = useState(null)
-    const [selectedFilters, setSelectedFilters] = useState(null)
+    const filtersRef = useRef(null);
 
+    const [filterOptions, setFilterOptions] = useState([]);
+    const [serverResponse, setServerResponse] = useState(null);
+
+    const [successMessagePSG, setSuccessMessagePSG] = useState(null)
+    const [successMessageEPPG, setSuccessMessageEPPG] = useState(null)
+
+    const [stepNumber, setStepNumber] = useState(0)
+
+
+    useEffect(() => {
+        if (serverResponse?.result) {
+            const groupedOptions = groupOptionsFromServerData(serverResponse.result.filters);
+            setFilterOptions(groupedOptions);
+        }
+    }, [serverResponse]);
+
+    const handleFiltersStepNext = async () => {
+        if (filtersRef.current?.handleFiltersSending) {
+            await filtersRef.current.handleFiltersSending();
+        }
+    };
     return (
         <Card className="card-content">
-            <Stepper ref={stepperRef} style={{ flexBasis: '50rem' }} orientation="vertical">
+            <Stepper ref={stepperRef} activeStep={stepNumber} orientation="vertical" onChangeStep={(e) => setStepNumber(e.index)}>
                 <StepperPanel header="Upload PSG file" className="custom-stepper-panel">
-                    <div className="step-content">
-                        <p>Choose your polysomnography file (.rml): </p>
-                        <FileUpload
-                        name="rml"
-                        accept=".rml"
-                        customUpload
-                        auto
-                        // uploadHandler={}
-                        chooseLabel="Choose file"
-                        className="uploader"
-                        emptyTemplate={<p>No file selected.</p>}
-                        />
-                        <div className="step-buttons">
-                            <Button label="Next" icon="pi pi-arrow-right" iconPos="right" className="next-btn"
-                                    onClick={() => stepperRef.current.nextCallback()}/>
-                        </div>
-                    </div>
+                    <PSGUploadStepperContent
+                        stepperRef={stepperRef}
+                        setServerResponse={setServerResponse}
+                        setSuccessMessage={setSuccessMessagePSG}
+                    />
                 </StepperPanel>
-                <StepperPanel header="Choose filters" >
-                    <div className="step-content">
-                        <MultiSelect
-                          value={selectedFilters}
-                          options={filterOptions}
-                          onChange={(e) => setSelectedFilters(e.value)}
-                          optionLabel="label"
-                          placeholder="Select filters"
-                          className="filter-dropdown"
-                        />
-                        <div className="step-buttons">
-                            <Button
-                                label="Back"
-                                icon="pi pi-arrow-left"
-                                onClick={() => stepperRef.current.prevCallback()}
-                                className="back-btn"
-                            />
-                            <Button
-                                label="Next"
-                                icon="pi pi-arrow-right"
-                                iconPos="right"
-                                onClick={() => stepperRef.current.nextCallback()}
-                                className="next-btn"
-                            />
-                        </div>
-                  </div>
+                <StepperPanel header="Choose filters">
+                    <FiltersStepperContent
+                        stepperRef={stepperRef}
+                        filterOptions={filterOptions}
+                        filtersRef={filtersRef}
+                        onNext={handleFiltersStepNext}
+                        successMessagePSG={successMessagePSG}
+                    />
                 </StepperPanel>
-
                 <StepperPanel header="Upload ePPG file" className="custom-stepper-panel">
-                    <div className="step-content">
-                        <p>Choose your ePPG file (.txt): </p>
-                        <FileUpload
-                            name="rml"
-                            accept=".rml"
-                            customUpload
-                            auto
-                            // uploadHandler={}
-                            chooseLabel="Choose file"
-                            className="uploader"
-                            emptyTemplate={<p>No file selected.</p>}
-                        />
-                        <div className="step-buttons">
-                            <Button
-                                label="Back"
-                                icon="pi pi-arrow-left"
-                                className="back-btn"
-                                onClick={() => stepperRef.current.prevCallback()}
-                            />
-                            <Button
-                                label="Next"
-                                icon="pi pi-arrow-right"
-                                iconPos="right"
-                                onClick={() => stepperRef.current.nextCallback()}
-                                className="next-btn"
-                            />
-                        </div>
-                    </div>
+                    <EPPGUploadStepperContent
+                        stepperRef={stepperRef}
+                        setServerResponse={setServerResponse}
+                        setSuccessMessage={setSuccessMessageEPPG}
+                    />
                 </StepperPanel>
-                    <StepperPanel header="Confirm" className="custom-stepper-panel">
-                    <div className="step-content">
-                        <div>
-                            <Button label="Annotate" severity="secondary" icon="pi pi-pen-to-square"/>
-                        </div>
-                    </div>
+                <StepperPanel header="Confirm" className="custom-stepper-panel">
+                    <ConfirmStepperContent
+                        stepperRef={stepperRef}
+                        successMessageEPPG={successMessageEPPG}
+                        setStepNumber={setStepNumber}
+                    />
                 </StepperPanel>
             </Stepper>
         </Card>
-    )
+    );
 }

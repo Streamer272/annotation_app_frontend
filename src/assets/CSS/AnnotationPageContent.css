@@ -4,13 +4,18 @@
     margin: 5% 15% 5% 15%;
 }
 /* Stepper panel container */
-.custom-stepper-panel {
+.custom-stepper-panel{
   padding: 2rem;
   border-radius: 1rem;
   background-color: #e8f5e9;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
+/* Stepper buttons disability */
+.p-stepper-header {
+    pointer-events: none;
+    cursor: default;
+}
 .p-stepper.p-stepper-vertical .p-stepper-panel .p-stepper-content{
     padding-left: 1.5rem;
 }
@@ -88,3 +93,13 @@
     font-style: normal;
 }
 
+
+/* Annotate button */
+.step-content .p-button.annotate{
+    color: green;
+    border: #81c784 solid 1px;
+}
+.step-content .p-button.annotate:hover{
+    color: #33691e;
+    border: #388e3c solid 1px;
+}
