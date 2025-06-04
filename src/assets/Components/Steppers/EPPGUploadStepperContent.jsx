@@ -5,6 +5,7 @@ import { Button } from "primereact/button";
 import {Message} from "primereact/message";
 
 export default function EPPGUploadStepperContent({ stepperRef, setServerResponse, setSuccessMessage }) {
+    // http://127.0.0.1:8000/annotation/upload-eppg/
     const uploaderRef = useRef(null);
     const [errorMessage, setErrorMessage] = useState(null);
     return (
@@ -17,7 +18,7 @@ export default function EPPGUploadStepperContent({ stepperRef, setServerResponse
                 setErrorMessage={setErrorMessage}
                 setSuccessMessage={setSuccessMessage}
                 fileType=".txt"
-                linkToServer="http://127.0.0.1:8000/annotation/upload-eppg/"
+                linkToServer="api/files/eppg/"
                 nameOfFile="EPPG_src"
             />
             {errorMessage && (

@@ -1,9 +1,12 @@
 import React, {useState, forwardRef, useImperativeHandle} from "react";
 import {MultiSelect} from "primereact/multiselect";
+import {getCookie} from "../utils/cookies.js";
 
 const Filters = forwardRef((props, ref) => {
     const [selectedFilters, setSelectedFilters] = useState([]);
+    // http://127.0.0.1:8000
 
+    const csrfToken = getCookie('csrftoken');
     const transformFilters = (selected) => {
         const grouped = {};
         selected.forEach(entry => {
@@ -17,10 +20,13 @@ const Filters = forwardRef((props, ref) => {
     const handleFiltersSending = async () => {
         const payload = transformFilters(selectedFilters);
 
-        const response = await fetch("http://127.0.0.1:8000/annotation/process-filters/", {
+        const response = await fetch("api/filters/selected/", {
             method: "POST",
             credentials: 'include',
-            headers: { "Content-Type": "application/json" },
+            headers: {
+                "Content-Type": "application/json"
+                // "X-CSRFToken": csrfToken
+            },
             body: JSON.stringify(payload)
         })
 

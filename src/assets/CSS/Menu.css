@@ -11,9 +11,9 @@
     cursor: default;
     pointer-events: none;
 }
-.p-component .title{
+.title{
     font-size: 1.5rem;
-    font-weight: 600;
+    font-weight: bold;
 }
 /* Target icons inside the Menubar */
 .custom-menubar .pi {
@@ -28,5 +28,6 @@
 .menu-icon-guidelines .pi:hover{
   color: #f9a825;
 }
+
 
 

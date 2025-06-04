@@ -14,7 +14,7 @@ export default function PSGUploadStepperContent(props) {
                 ref={uploaderRef}
                 setServerResponse={props.setServerResponse}
                 fileType=".rml"
-                linkToServer="http://127.0.0.1:8000/annotation/get-filters/"
+                linkToServer="api/filters/"
                 nameOfFile="RML_src"
                 setSuccessMessage={props.setSuccessMessage}
                 setErrorMessage={setErrorMessage}

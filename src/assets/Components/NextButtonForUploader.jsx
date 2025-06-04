@@ -1,6 +1,5 @@
 import {Button} from "primereact/button";
 import React from "react";
-import {Message} from "primereact/message";
 
 export default function NextButtonForUploader(props){
     const handleClick = () => {
@@ -20,6 +19,7 @@ export default function NextButtonForUploader(props){
                 iconPos="right"
                 className="next-btn"
                 onClick={handleClick}
+
             />
 
         </>

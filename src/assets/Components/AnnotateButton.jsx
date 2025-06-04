@@ -7,8 +7,7 @@ export default function AnnotateButton(props) {
 
     const handleAnnotateClick = async () => {
         setLoading(true)
-
-        const response = await fetch('http://127.0.0.1:8000/annotation/annotate/', {
+        const response = await fetch('api/annotate/', {
             method: 'GET',
             credentials: 'include',
         });
@@ -16,8 +15,11 @@ export default function AnnotateButton(props) {
 
         if (response) {
             setLoading(false)
-            if (!response.ok)
-                props.setErrorMessage("Error")
+            if (!response.ok) {
+                const errorData = await response.json();
+                const errorText = errorData?.error || "Unknown error";
+                props.setErrorMessage(`Error: ${errorText}`);
+            }
             else{
                 const blob = await response.blob();
                 const contentDisposition = response.headers.get('Content-Disposition');
