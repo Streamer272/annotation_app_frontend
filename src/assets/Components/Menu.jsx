@@ -4,28 +4,17 @@ import "../CSS/Menu.css"
 
 
 export default function Menu() {
-    const menuItems = [
-        {
-            label: "PSG Annotation",
-            className: "menu-title-item title",
-        },
-        {
-            label: "Guidelines",
-            icon: "pi pi-info-circle",
-            url: "/guidelines",
-            className: "menu-icon-guidelines"
-        },
-        {
-            label: "Swagger Docs",
-            icon: "pi pi-book",
-            url: "/swagger",
-        },
-    ];
-
+    const menuItems = []
+    const start = (
+        <div style={{display: 'flex', alignItems: 'center', gap: '0.5rem'}}>
+            <img src="/favicon.png" alt="Logo" style={{width: '10%', height: '10%'}}/>
+            <span className="title">PSG Annotation</span>
+        </div>
+    );
 
     return (
         <>
-            <Menubar model={menuItems}  className="custom-menubar" />
+            <Menubar model={menuItems} className="custom-menubar" start={start}/>
         </>
     );
 }

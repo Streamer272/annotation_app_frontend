@@ -4,12 +4,12 @@ import { Toast } from 'primereact/toast';
 import { Tooltip } from 'primereact/tooltip';
 
 import "../CSS/FileUploader.css";
-import {Message} from "primereact/message";
 
 const FileUploader = forwardRef((props, ref) => {
     const toast = useRef(null);
     const fileUploadRef = useRef(null);
     const [selectedFile, setSelectedFile] = useState(null);
+    const [loading, setLoading] = useState(false)
 
 
     const onTemplateSelect = (e) => {
@@ -62,6 +62,7 @@ const FileUploader = forwardRef((props, ref) => {
         const file = files?.[0];
         if (!file) return;
 
+        setLoading(true)
         const formData = new FormData();
         formData.append(props.nameOfFile, file);
 
@@ -74,8 +75,9 @@ const FileUploader = forwardRef((props, ref) => {
 
         const contentType = response.headers.get("content-type");
         if (response.ok) {
+            setLoading(false)
             props.stepperRef.current.nextCallback();
-            props.setSuccessMessage("Your file was successfully processed! If you want to change it, you need to return and upload it again.")
+            props.setSuccessMessage("Your previous file was successfully validated! If you want to change it, you need to return and upload it again.")
             const data = contentType?.includes("application/json")
                 ? await response.json()
                 : null;
@@ -83,11 +85,15 @@ const FileUploader = forwardRef((props, ref) => {
             if (data) {
                 props.setServerResponse?.(data);
             }
-        }else if(response.status === 400 || response.status === 422){
+        }else if (response.status === 400){
+            props.setErrorMessage?.(`Error: Incorrect file type, expected ${props.fileType}`);
+        } else if (response.status === 422){
+            setLoading(false)
             const errorData = await response.json();
             const errorMessage = errorData?.error
             props.setErrorMessage?.(errorMessage);
         }else {
+            setLoading(false)
             props.setErrorMessage("Something went wrong... Try again")
         }
     };
@@ -96,7 +102,8 @@ const FileUploader = forwardRef((props, ref) => {
         upload: () => {
             fileUploadRef.current?.upload();
         },
-        hasFile: () => Boolean(selectedFile)
+        hasFile: () => Boolean(selectedFile),
+        loading: loading
     }));
 
     return (
