@@ -2,9 +2,11 @@ import React, {useState, forwardRef, useImperativeHandle} from "react";
 import {MultiSelect} from "primereact/multiselect";
 import {getCookie} from "../utils/cookies.js";
 
+const API_BASE_URL = import.meta.env.VITE_API_URL
+
+
 const Filters = forwardRef((props, ref) => {
     const [selectedFilters, setSelectedFilters] = useState([]);
-    // http://127.0.0.1:8000
 
     const csrfToken = getCookie('csrftoken');
     const transformFilters = (selected) => {
@@ -20,22 +22,25 @@ const Filters = forwardRef((props, ref) => {
     const handleFiltersSending = async () => {
         const payload = transformFilters(selectedFilters);
 
-        const response = await fetch("api/filters/selected/", {
+        const response = await fetch(API_BASE_URL + "/filters/selected/", {
             method: "POST",
             credentials: 'include',
             headers: {
-                "Content-Type": "application/json"
-                // "X-CSRFToken": csrfToken
+                "Content-Type": "application/json",
+                "X-CSRFToken": csrfToken
             },
             body: JSON.stringify(payload)
         })
 
-        if (response.status === 204){
+        if (response.status === 204) {
             props.stepperRef.current.nextCallback();
-        }else {
+        } else if (response.status === 400) {
+            const errorData = await response.json();
+            const errorMessage = errorData?.error
+            props.setErrorMessage?.(errorMessage)
+        } else {
             props.setErrorMessage("Something went wrong...Try again")
         }
-
     };
 
     useImperativeHandle(ref, () => ({

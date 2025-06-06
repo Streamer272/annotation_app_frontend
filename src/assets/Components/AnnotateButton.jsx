@@ -2,12 +2,14 @@ import React, {useState} from "react";
 import { Button } from "primereact/button";
 import {ProgressSpinner} from "primereact/progressspinner";
 
+const API_BASE_URL = import.meta.env.VITE_API_URL
+
 export default function AnnotateButton(props) {
     const [loading, setLoading] = useState(false)
 
     const handleAnnotateClick = async () => {
         setLoading(true)
-        const response = await fetch('api/annotate/', {
+        const response = await fetch(API_BASE_URL + '/annotate/', {
             method: 'GET',
             credentials: 'include',
         });

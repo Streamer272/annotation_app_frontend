@@ -4,10 +4,13 @@ import NextButtonForUploader from "../NextButtonForUploader.jsx";
 import { Button } from "primereact/button";
 import {Message} from "primereact/message";
 
+const API_BASE_URL = import.meta.env.VITE_API_URL
+
+
 export default function EPPGUploadStepperContent({ stepperRef, setServerResponse, setSuccessMessage }) {
-    // http://127.0.0.1:8000/annotation/upload-eppg/
     const uploaderRef = useRef(null);
     const [errorMessage, setErrorMessage] = useState(null);
+    const [loading, setLoading] = useState(false)
     return (
         <div className="step-content">
             <p>Choose your ePPG file (.txt):</p>
@@ -18,8 +21,9 @@ export default function EPPGUploadStepperContent({ stepperRef, setServerResponse
                 setErrorMessage={setErrorMessage}
                 setSuccessMessage={setSuccessMessage}
                 fileType=".txt"
-                linkToServer="api/files/eppg/"
+                linkToServer={API_BASE_URL + '/files/eppg/'}
                 nameOfFile="EPPG_src"
+                setLoading={setLoading}
             />
             {errorMessage && (
                         <Message severity="error" text={errorMessage} />)
@@ -31,7 +35,13 @@ export default function EPPGUploadStepperContent({ stepperRef, setServerResponse
                     className="back-btn"
                     onClick={() => stepperRef.current.prevCallback()}
                 />
-                <NextButtonForUploader uploaderRef={uploaderRef} setErrorMessage={setErrorMessage} />
+                <NextButtonForUploader
+                    uploaderRef={uploaderRef}
+                    errorMessage={errorMessage}
+                    setErrorMessage={setErrorMessage}
+                    loading={loading}
+                    setLoading={setLoading}
+                />
             </div>
         </div>
     );

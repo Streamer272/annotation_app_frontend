@@ -4,26 +4,27 @@ import { Toast } from 'primereact/toast';
 import { Tooltip } from 'primereact/tooltip';
 
 import "../CSS/FileUploader.css";
+import {getCookie} from "../utils/cookies.js";
+
 
 const FileUploader = forwardRef((props, ref) => {
     const toast = useRef(null);
     const fileUploadRef = useRef(null);
     const [selectedFile, setSelectedFile] = useState(null);
-    const [loading, setLoading] = useState(false)
-
 
     const onTemplateSelect = (e) => {
         const file = e.files?.[0];
+        props.setErrorMessage("")
         if (file) {
             setSelectedFile(file);
             fileUploadRef.current.setFiles([file]);
         }
-        props.setErrorMessage("")
     };
 
     const onClear = () => {
         setSelectedFile(null);
         props.setErrorMessage("")
+
     };
     const headerTemplate = (options) => {
         const { className, chooseButton, cancelButton } = options;
@@ -62,20 +63,24 @@ const FileUploader = forwardRef((props, ref) => {
         const file = files?.[0];
         if (!file) return;
 
-        setLoading(true)
         const formData = new FormData();
         formData.append(props.nameOfFile, file);
-
+        const csrfToken = getCookie('csrftoken');
 
         const response = await fetch(props.linkToServer, {
             method: 'POST',
             body: formData,
             credentials: 'include',
+            headers: {
+                "X-CSRFToken": csrfToken
+            }
         });
 
         const contentType = response.headers.get("content-type");
-        if (response.ok) {
-            setLoading(false)
+        if (response){
+            props.setLoading(false)
+
+            if (response.ok) {
             props.stepperRef.current.nextCallback();
             props.setSuccessMessage("Your previous file was successfully validated! If you want to change it, you need to return and upload it again.")
             const data = contentType?.includes("application/json")
@@ -85,16 +90,15 @@ const FileUploader = forwardRef((props, ref) => {
             if (data) {
                 props.setServerResponse?.(data);
             }
-        }else if (response.status === 400){
-            props.setErrorMessage?.(`Error: Incorrect file type, expected ${props.fileType}`);
-        } else if (response.status === 422){
-            setLoading(false)
-            const errorData = await response.json();
-            const errorMessage = errorData?.error
-            props.setErrorMessage?.(errorMessage);
-        }else {
-            setLoading(false)
-            props.setErrorMessage("Something went wrong... Try again")
+            }else if (response.status === 400){
+                props.setErrorMessage?.(`Error: Incorrect file type, expected ${props.fileType}`);
+            } else if (response.status === 422){
+                const errorData = await response.json();
+                const errorMessage = errorData?.error
+                props.setErrorMessage?.(errorMessage);
+            }else {
+                props.setErrorMessage("Something went wrong... Try again")
+            }
         }
     };
 
@@ -102,8 +106,7 @@ const FileUploader = forwardRef((props, ref) => {
         upload: () => {
             fileUploadRef.current?.upload();
         },
-        hasFile: () => Boolean(selectedFile),
-        loading: loading
+        hasFile: () => Boolean(selectedFile)
     }));
 
     return (

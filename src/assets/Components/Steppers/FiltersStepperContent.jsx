@@ -1,11 +1,9 @@
-import React, {useState} from "react";
-import { StepperPanel } from "primereact/stepperpanel";
+import React from "react";
 import { Button } from "primereact/button";
 import Filters from "../Filters.jsx";
 import {Message} from "primereact/message";
 
 export default function FiltersStepperContent(props) {
-    const [errorMessage, setErrorMessage] = useState("")
     return (
         <div className="step-content">
             {props.successMessagePSG && (
@@ -15,10 +13,10 @@ export default function FiltersStepperContent(props) {
                 stepperRef={props.stepperRef}
                 ref={props.filtersRef}
                 filterOptions={props.filterOptions}
-                setErrorMessage={setErrorMessage}
+                setErrorMessage={props.setErrorMessage}
             />
-            {errorMessage && (
-                        <Message severity="error" text={errorMessage} />)
+            {props.errorMessage && (
+                        <Message severity="error" text={props.errorMessage} />)
             }
             <div className="step-buttons">
                 <Button
