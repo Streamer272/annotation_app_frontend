@@ -1,8 +1,36 @@
 @import url('https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@300;400;600;700&display=swap');
-body{
+
+html {
+  font-size: 100%; /* 16px default, adjustable */
+  box-sizing: border-box;
+}
+
+*, *::before, *::after {
+  box-sizing: inherit;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Source Sans 3', sans-serif;
+  font-size: 1rem; /* Base size, adjustable */
+  line-height: 1.6; /* Good readable line height */
   background-color: rgba(200, 230, 201, 0.3);
   border-radius: 10px;
   backdrop-filter: blur(4px);
-  margin: 0;
-  font-family: 'Source Sans 3', sans-serif;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+@media (max-width: 768px) {
+  html, .next-btn, .back-btn{
+    font-size: 90%;
+  }
+}
+
+@media (max-width: 480px) {
+  html, .next-btn, .back-btn{
+    font-size: 85%;
+  }
 }

@@ -12,6 +12,9 @@ export default function ConfirmStepperContent(props) {
             {props.successMessageEPPG && (
                         <Message severity="success" text={props.successMessageEPPG} />)
             }
+            {
+                <Message severity="info" summary="Info" text="After annotation, your file will be automatically uploaded!"/>
+            }
             <div>
                 <AnnotateButton
                     stepperRef={props.stepperRef}

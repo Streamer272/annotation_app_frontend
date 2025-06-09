@@ -103,3 +103,17 @@
     color: #33691e;
     border: #388e3c solid 1px;
 }
+
+@media (max-width: 768px) {
+  .card-content {
+    width: 80%;
+    margin: 5% 10% 5% 10%;
+  }
+}
+
+@media (max-width: 480px) {
+  .card-content {
+    width: 90%;
+    margin: 5% 5% 5% 5%;
+  }
+}

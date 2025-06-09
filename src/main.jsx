@@ -9,8 +9,6 @@ import "primereact/resources/primereact.min.css";
 import "primeicons/primeicons.css";
 
 
-
-
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <App />
