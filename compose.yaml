@@ -1,0 +1,7 @@
+services:
+  frontend:
+    build: .
+    restart: on-failure:10
+
+    ports:
+      - "${FRONTEND_PORT:-3000}:3000"
